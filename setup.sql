@@ -36,3 +36,17 @@ CREATE TABLE IF NOT EXISTS `messages` (
   CONSTRAINT `fk_messages_receiver`
     FOREIGN KEY (`receiver_id`) REFERENCES `users` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- -------------------------------------------------------
+-- Read cursors — tracks last-read message per conversation
+-- -------------------------------------------------------
+CREATE TABLE IF NOT EXISTS `reads` (
+  `reader_id`            INT UNSIGNED NOT NULL,
+  `sender_id`            INT UNSIGNED NOT NULL,
+  `last_read_message_id` INT UNSIGNED NOT NULL DEFAULT 0,
+  PRIMARY KEY (`reader_id`, `sender_id`),
+  CONSTRAINT `fk_reads_reader`
+    FOREIGN KEY (`reader_id`) REFERENCES `users` (`id`) ON DELETE CASCADE,
+  CONSTRAINT `fk_reads_sender`
+    FOREIGN KEY (`sender_id`) REFERENCES `users` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
